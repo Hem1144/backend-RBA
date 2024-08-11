@@ -2,11 +2,13 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const express = require("express");
 const authRoute = require("./routes/authRoute");
+const adminRoute = require("./routes/adminRoute");
 
 const app = express();
 app.use(express.json());
 app.use(express.static("public"));
 app.use("/api", authRoute);
+app.use("/api/admin", adminRoute);
 
 const connectToDatabase = async () => {
   try {
