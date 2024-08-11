@@ -42,7 +42,10 @@ const registerUser = async (req, res) => {
 };
 
 const generateAccessToken = async (user) => {
-  const token = jwt.sign(user, process.env.SECRET_KEY, { expiresIn: "2h" });
+  const token = jwt.sign(user, process.env.SECRET_KEY, {
+    expiresIn: "2h",
+  });
+
   return token;
 };
 
@@ -60,7 +63,6 @@ const loginUser = async (req, res) => {
 
     const { email, password } = req.body;
     const userData = await User.findOne({ email });
-
     if (!userData) {
       return res.status(400).json({
         success: false,
@@ -93,4 +95,22 @@ const loginUser = async (req, res) => {
   }
 };
 
-module.exports = { registerUser, loginUser };
+const getProfile = async (req, res) => {
+  try {
+    const user_id = req.user_id;
+    const userData = await User.findById({ _id: user_id });
+
+    return res.status(400).json({
+      success: true,
+      message: "Profile Data",
+      data: userData,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+module.exports = { registerUser, loginUser, getProfile };
